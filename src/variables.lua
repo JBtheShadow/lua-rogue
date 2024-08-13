@@ -13,6 +13,8 @@ local RenderOrder = require "enums/RenderOrder"
 local EquipmentSlots = require "enums/EquipmentSlots"
 local GameStates = require "enums/GameStates"
 
+local MessageLog = require "messages/MessageLog"
+
 local fighterComponent = Fighter:new { hp=100, defense=1, power=2, speed=4 }
 local inventoryComponent = Inventory:new(26)
 local levelComponent = Level:new()
@@ -34,7 +36,7 @@ local gameMap = {} -- GameMap(constants['map_width'], constants['map_height'])
 --game_map.make_map(constants['max_rooms'], constants['room_min_size'], constants['room_max_size'],
 --                  constants['map_width'], constants['map_height'], player, entities)
 
-local messageLog = {} -- MessageLog(constants['message_x'], constants['message_width'], constants['message_height'])
+local messageLog = MessageLog:new(constants.message.x, constants.message.width, constants.message.height)
 
 local gameState = GameStates.PLAYERS_TURN
 
