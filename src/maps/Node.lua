@@ -2,7 +2,7 @@ local Node = { id, x, y }
 
 function Node:new(x, y)
     local obj = setmetatable({}, {__index = self})
-    obj.id = str.format("%d,%d", x, y)
+    obj.id = string.format("%d,%d", x, y)
     obj.x = x
     obj.y = y
     return obj

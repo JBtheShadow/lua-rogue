@@ -11,21 +11,21 @@ function Inventory:new(capacity)
     return obj
 end
 
-function Inventory:addItem(toAdd)
+function Inventory:addItem(item)
     local results = {}
 
-    if toAdd.item.canStack then
+    if item.item.canStack then
         local candidate = nil
-        for _, item in ipairs(self.items) do
-            if item.name == toAdd.name and item.item.canStack then
-                candidate = item
+        for _, x in ipairs(self.items) do
+            if x.name == item.name and x.item.canStack then
+                candidate = x
                 break
             end
         end
         if not candidate and #self.items >= self.capacity then
-            table.insert(results, { itemAdded = nil, message = Message:new("You cannot carry any more, your inventory is full", "yellow") })
+            table.insert(results, { itemAdded, message = Message:new("You cannot carry any more, your inventory is full", "yellow") })
         else
-            table.insert(results, { itemAdded = item, message = Message:new(str.format("You pick up %d %s(s)!", item.item.amount, item.name), "blue") })
+            table.insert(results, { itemAdded = item, message = Message:new(string.format("You pick up %d %s(s)!", item.item.amount, item.name), "blue") })
 
             if not candidate then
                 table.insert(self.items, item)
@@ -35,9 +35,9 @@ function Inventory:addItem(toAdd)
         end
     else
         if #self.items >= self.capacity then
-            table.insert(results, { itemAdded = nil, message = Message:new("You cannot carry any more, your inventory is full", "yellow") })
+            table.insert(results, { itemAdded, message = Message:new("You cannot carry any more, your inventory is full", "yellow") })
         else
-            table.insert(results, { itemAdded = item, message = Message:new(str.format("You pick up the %s!", item.name), "blue") })
+            table.insert(results, { itemAdded = item, message = Message:new(string.format("You pick up the %s!", item.name), "blue") })
 
             table.insert(self.items, item)
         end
@@ -57,7 +57,7 @@ function Inventory:use(itemEntity, args)
         if equippableComponent then
             table.insert(results, { equip = itemEntity })
         else
-            table.insert(results, { message = Message:new(str.format("The %s cannot be used", itemEntity.name), "yellow") })
+            table.insert(results, { message = Message:new(string.format("The %s cannot be used", itemEntity.name), "yellow") })
         end
     elseif itemComponent.targeting and not (args or args.target or args.target.x or args.target.y) then
         table.insert(results, { targeting = itemEntity })
@@ -100,7 +100,7 @@ function Inventory:dropItem(item)
     item.y = self.owner.y
 
     self:removeItem(item)
-    table.insert(results, { itemDropped = item, message = Message:new(str.format("You dropped the %s", item.name), "yellow") })
+    table.insert(results, { itemDropped = item, message = Message:new(string.format("You dropped the %s", item.name), "yellow") })
     
     return results
 end
@@ -113,14 +113,14 @@ function Inventory:getOptions()
     for _, item in ipairs(self.items) do
         if self.owner and self.owner.equipment then
             if self.owner.equipment.mainHand == item then
-                table.insert(equipOptions, str.format("%s (on main hand)", item.name))
+                table.insert(equipOptions, string.format("%s (on main hand)", item.name))
             elseif self.owner.equipment.offHand == item then
-                table.insert(equipOptions, str.format("%s (on off hand)", item.name))
+                table.insert(equipOptions, string.format("%s (on off hand)", item.name))
             else
-                table.insert(equipOptions, str.format("%s (equipped elsewhere?)", item.name))
+                table.insert(equipOptions, string.format("%s (equipped elsewhere?)", item.name))
             end
         elseif item.item.canStack then
-            table.insert(options, str.format("%d %s(s)", item.item.amount, item.name))
+            table.insert(options, string.format("%d %s(s)", item.item.amount, item.name))
         else
             table.insert(options, item.name)
         end

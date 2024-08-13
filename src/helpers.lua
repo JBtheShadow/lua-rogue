@@ -19,7 +19,7 @@ function groupOptions(options)
     local groups = group(options)
     for key, group in pairs(groups) do
         if group.count > 1 then
-            table.insert(str.format("%s x%d", key, group.count))
+            table.insert(string.format("%s x%d", key, group.count))
         else
             table.insert(key)
         end

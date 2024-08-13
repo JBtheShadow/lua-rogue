@@ -98,3 +98,5 @@ function Equipment:toggleEquip(equippableEntity)
 
     return results
 end
+
+return Equipment

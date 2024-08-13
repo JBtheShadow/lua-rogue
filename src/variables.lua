@@ -15,6 +15,8 @@ local GameStates = require "enums/GameStates"
 
 local MessageLog = require "messages/MessageLog"
 
+math.randomseed(os.time())
+
 local fighterComponent = Fighter:new { hp=100, defense=1, power=2, speed=4 }
 local inventoryComponent = Inventory:new(26)
 local levelComponent = Level:new()
@@ -25,7 +27,7 @@ local player = Entity:new {
     equipment=equipmentComponent
 }
 local entities = EntityList:new()
-entities.append(player)
+entities:append(player)
 
 local equippableComponent = Equippable:new { slot=EquipmentSlots.MAIN_HAND, powerBonus=2 }
 local dagger = Entity:new { x=0, y=0, char="-", color="sky", name="Dagger", equippable=equippableComponent }

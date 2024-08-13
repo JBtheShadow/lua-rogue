@@ -93,14 +93,14 @@ function Fighter:attack(target)
 
     if damage > 0 then
         table.insert(results, {
-            message = Message:new(str.format("%s attacks %s for %d hit point(s).", capitalize(self.owner.name), target.name, damage))
+            message = Message:new(string.format("%s attacks %s for %d hit point(s).", capitalize(self.owner.name), target.name, damage))
         })
         for _, result in ipairs(target.fighter:takeDamage(damage)) do
             results.append(result)
         end
     else
         table.insert(results, {
-            message = Message:new(str.format("%s attacks %s but does not damage.", capitalize(self.owner.name), target.name))
+            message = Message:new(string.format("%s attacks %s but does not damage.", capitalize(self.owner.name), target.name))
         })
     end
 

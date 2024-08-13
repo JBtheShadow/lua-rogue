@@ -24,7 +24,7 @@ function ConfusedMonster:takeTurn(_, _, gameMap, entities)
         self.numberOfTurns = self.numberOfTurns - 1
     else
         self.owner.ai = self.previousAI
-        table.insert(results, { message = Message:new(str.format("The %s is no longer confused!", self.owner.name), "red") })
+        table.insert(results, { message = Message:new(string.format("The %s is no longer confused!", self.owner.name), "red") })
     end
 
     return results
