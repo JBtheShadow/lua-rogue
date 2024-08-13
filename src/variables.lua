@@ -1,10 +1,14 @@
 local constants = require "constants"
+
 local Entity = require "actors/Entity"
+local EntityList = require "actors/EntityList"
+
 local Fighter = require "components/Fighter"
 local Inventory = require "components/Inventory"
 local Level = require "components/Level"
 local Equipment = require "components/Equipment"
 local Equippable = require "components/Equippable"
+
 local RenderOrder = require "enums/RenderOrder"
 local EquipmentSlots = require "enums/EquipmentSlots"
 local GameStates = require "enums/GameStates"
@@ -18,8 +22,8 @@ local player = Entity:new {
     fighter=fighterComponent, inventory=inventoryComponent, level=levelComponent,
     equipment=equipmentComponent
 }
-local entities = {} -- EntityList()
---entities.append(player)
+local entities = EntityList:new()
+entities.append(player)
 
 local equippableComponent = Equippable:new { slot=EquipmentSlots.MAIN_HAND, powerBonus=2 }
 local dagger = Entity:new { x=0, y=0, char="-", color="sky", name="Dagger", equippable=equippableComponent }
