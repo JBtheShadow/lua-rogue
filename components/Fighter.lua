@@ -95,7 +95,7 @@ function Fighter:attack(target)
         table.insert(results, {
             message = Message:new(str.format("%s attacks %s for %d hit point(s).", capitalize(self.owner.name), target.name, damage))
         })
-        for result in target.fighter:takeDamage(damage) do
+        for _, result in ipairs(target.fighter:takeDamage(damage)) do
             results.append(result)
         end
     else
