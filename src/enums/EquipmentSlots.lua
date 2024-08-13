@@ -1,6 +1,6 @@
 local EquipmentSlots = {
-    MAIN_HAND = 1,
-    OFF_HAND = 2
+    MAIN_HAND = {},
+    OFF_HAND = {}
 }
 
 return EquipmentSlots
