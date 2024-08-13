@@ -33,7 +33,7 @@ end
 function Fighter:maxHp()
     local bonus = 0
     if self.owner and self.owner.equipment then
-        bonus = self.owner.equipment.bonus.maxHp
+        bonus = self.owner.equipment:maxHpBonus()
     end
 
     return self.base.maxHp + bonus
@@ -42,7 +42,7 @@ end
 function Fighter:power()
     local bonus = 0
     if self.owner and self.owner.equipment then
-        bonus = self.owner.equipment.bonus.power
+        bonus = self.owner.equipment:powerBonus()
     end
        
     return self.base.power + bonus
@@ -51,7 +51,7 @@ end
 function Fighter:defense()
     local bonus = 0
     if self.owner and self.owner.equipment then
-        bonus = self.owner.equipment.bonus.defense
+        bonus = self.owner.equipment:defenseBonus()
     end
        
     return self.base.defense + bonus
@@ -60,7 +60,7 @@ end
 function Fighter:speed()
     local bonus = 0
     if self.owner and self.owner.equipment then
-        bonus = self.owner.equipment.bonus.speed
+        bonus = self.owner.equipment:speedBonus()
     end
        
     return self.base.speed + bonus

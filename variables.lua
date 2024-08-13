@@ -1,13 +1,14 @@
 local Fighter = require "components/Fighter"
 local Inventory = require "components/Inventory"
 local Level = require "components/Level"
+local Equipment = require "components/Equipment"
 
 local constants = require "constants"
 
 local fighterComponent = Fighter:new { hp=100, defense=1, power=2, speed=4 }
 local inventoryComponent = Inventory:new(26)
 local levelComponent = Level:new()
-local equipmentComponent = {} --Equipment()
+local equipmentComponent = Equipment:new()
 local player = {} --Entity(0, 0, '@', libtcod.white, 'Player', blocks=True, render_order=RenderOrder.ACTOR,
                   --fighter=fighter_component, inventory=inventory_component, level=level_component,
                  --equipment=equipment_component)
