@@ -87,6 +87,8 @@ function Entity:distance(x, y)
     return ((x - self.x)^2 + (y - self.y)^2)^0.5
 end
 
--- Might consider looking for an A* lib, unless you *really* wanna implement something yourself
+function Entity:moveAround(target, entities, gameMap)
+    
+end
 
 return Entity

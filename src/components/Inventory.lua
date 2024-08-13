@@ -22,7 +22,7 @@ function Inventory:addItem(toAdd)
                 break
             end
         end
-        if not candidate and table.getn(self.items) >= self.capacity then
+        if not candidate and #self.items >= self.capacity then
             table.insert(results, { itemAdded = nil, message = Message:new("You cannot carry any more, your inventory is full", "yellow") })
         else
             table.insert(results, { itemAdded = item, message = Message:new(str.format("You pick up %d %s(s)!", item.item.amount, item.name), "blue") })
@@ -34,7 +34,7 @@ function Inventory:addItem(toAdd)
             end
         end
     else
-        if table.getn(self.items) >= self.capacity then
+        if #self.items >= self.capacity then
             table.insert(results, { itemAdded = nil, message = Message:new("You cannot carry any more, your inventory is full", "yellow") })
         else
             table.insert(results, { itemAdded = item, message = Message:new(str.format("You pick up the %s!", item.name), "blue") })
