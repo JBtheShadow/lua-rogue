@@ -1,5 +1,7 @@
 local RenderOrder = require "enums/RenderOrder"
 local Item = require "components/Item"
+local CollisionMap = require "maps/CollisionMap"
+local Node = require "maps/Node"
 
 local Entity = { x, y, char, color, name, blocks, renderOrder, fighter, ai, item, inventory, stairs, level, equipment, equippable }
 
@@ -70,9 +72,9 @@ function Entity:move(dx, dy)
     self.y = self.y + dy
 end
 
-function Entity:moveTowards(targetX, targetY, gameMap, entities)
-    local dx = targetX - self.x
-    local dy = targetY - self.y
+function Entity:moveTowards(target, gameMap, entities)
+    local dx = target.x - self.x
+    local dy = target.y - self.y
     local distance = (dx^2 + dy^2)^0.5
 
     dx = math.floor(dx / distance + 0.5)
@@ -88,7 +90,43 @@ function Entity:distance(x, y)
 end
 
 function Entity:moveAround(target, entities, gameMap)
-    
+    local fov = CollisionMap:new(gameMap.width, gameMap.height)
+
+    for y = 1, gameMap.height do
+        for x = 1, gameMap.width do
+            local tile = gameMap:getTile(x, y)
+            fov:setProps(tile.x, tile.y, tile.blockSight, tile.blocked)
+        end
+    end
+
+    for _, entity in ipairs(entities) do
+        if entity.blocks and entity ~= self and entity ~= target then
+            fov:setProps(entity.x, entity.y, false, true)
+        end
+    end
+
+    local path = fov:findPath(self, target, 25)
+    if path == nil then
+        self:moveTowards(target)
+    else
+        local nextMove = path[0]
+        self.x = nextMove.x
+        self.y = nextMove.y
+    end
+end
+
+function Entity:distanceTo(other)
+    return self:distance(other.x, other.y)
+end
+
+function Entity.getBlockingEntityAtLocation(entities, x, y)
+    for _, entity in ipairs(entities) do
+        if entity.blocks and entity.x == x and entity.y == y then
+            return entity
+        end
+    end
+
+    return nil
 end
 
 return Entity
