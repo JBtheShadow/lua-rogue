@@ -1,5 +1,5 @@
 function love.load()
-    local variables = require "variables"
+    local variables = require "config/variables"
 end
 
 function love.update(dt)

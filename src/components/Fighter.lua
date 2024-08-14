@@ -1,4 +1,4 @@
-require "helpers"
+require "utils/stringUtils"
 local Message = require "messages/Message"
 
 local Fighter = {

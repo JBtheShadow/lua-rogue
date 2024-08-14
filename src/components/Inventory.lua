@@ -1,4 +1,4 @@
-require "helpers"
+require "utils/optionUtils"
 local Message = require "messages/Message"
 
 local Inventory = { capacity, items, owner }

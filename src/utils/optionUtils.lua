@@ -1,7 +1,3 @@
-function capitalize(str)
-    return (str:gsub("^%l", string.upper))
-end
-
 function group(options)
     local groups = {}
     for i, option in ipairs(options) do
