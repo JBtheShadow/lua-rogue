@@ -63,7 +63,7 @@ function Inventory:use(itemEntity, args)
         table.insert(results, { targeting = itemEntity })
     else
         local onUseArgs = {}
-        for k, v in pairs(itemComponent.onUseArgs) do onUseArgs[k] = v end
+        for k, v in pairs(itemComponent.args) do onUseArgs[k] = v end
         for k, v in pairs(args) do onUseArgs[k] = v end
         local itemResults = itemComponent.onUse(self.owner, onUseArgs)
 

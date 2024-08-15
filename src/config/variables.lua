@@ -19,9 +19,8 @@ local dagger = Entity:newEquipment(0, 0, "-", "sky", "Dagger", { slot=EquipmentS
 player.inventory:addItem(dagger)
 player.equipment:toggleEquip(dagger)
 
-local gameMap = {} -- GameMap(constants['map_width'], constants['map_height'])
---game_map.make_map(constants['max_rooms'], constants['room_min_size'], constants['room_max_size'],
---                  constants['map_width'], constants['map_height'], player, entities)
+local gameMap = GameMap:new(constants.map.width, constants.map.height)
+gameMap.makeMap(constants.rooms.max, constants.rooms.size.min, constants.rooms.size.max, constants.map.width, constants.map.height, player, entities)
 
 local messageLog = MessageLog:new(constants.message.x, constants.message.width, constants.message.height)
 

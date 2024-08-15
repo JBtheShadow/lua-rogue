@@ -3,6 +3,7 @@ local Item = require "components.Item"
 local CollisionMap = require "maps.CollisionMap"
 local Node = require "maps.Node"
 
+local BasicMonster = require "components.ai.BasicMonster"
 local Fighter = require "components.Fighter"
 local Inventory = require "components.Inventory"
 local Level = require "components.Level"
@@ -140,6 +141,28 @@ function Entity:newPlayer(x, y)
         equipment=equipmentComponent
     }
     return player
+end
+
+function Entity:newMonster(x, y, char, color, name, args)
+    local fighterComponent = Fighter:new(args)
+    local aiComponent = BasicMonster:new()
+    local monster = Entity:new {
+        x=x, y=y, char=char, color=color, name=name, blocks=true,
+        renderOrder=RenderOrder.ACTOR, fighter=fighterComponent, ai=aiComponent
+    }
+    return monster
+end
+
+function Entity:newGoldPile(x, y, amount)
+    local itemComponent = Item:new { args={ canStack=true, amount=amount }}
+    local item = Entity:new { x=x, y=y, char="$", color="yellow", name="Gold Coin", renderOrder=RenderOrder.ITEM, item=itemComponent }
+    return item
+end
+
+function Entity:newItem(x, y, char, color, name, args)
+    local itemComponent = Item:new { onUse = args.onUse, args = args.args }
+    local item = Entity:new { x=x, y=y, char=char, color=color, name=name, renderOrder=RenderOrder.ITEM, item=itemComponent }
+    return item
 end
 
 function Entity:newEquipment(x, y, char, color, name, args)
