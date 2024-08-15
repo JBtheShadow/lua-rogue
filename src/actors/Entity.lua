@@ -3,6 +3,13 @@ local Item = require "components.Item"
 local CollisionMap = require "maps.CollisionMap"
 local Node = require "maps.Node"
 
+local Fighter = require "components.Fighter"
+local Inventory = require "components.Inventory"
+local Level = require "components.Level"
+local Equipment = require "components.Equipment"
+local Equippable = require "components.Equippable"
+local Stairs = require "components.Stairs"
+
 local Entity = { x, y, char, color, name, blocks, renderOrder, fighter, ai, item, inventory, stairs, level, equipment, equippable }
 
 function Entity:new(args)
@@ -120,6 +127,34 @@ function Entity.getBlockingEntityAtLocation(entities, x, y)
     end
 
     return nil
+end
+
+function Entity:newPlayer(x, y)
+    local fighterComponent = Fighter:new { hp=100, defense=1, power=2, speed=4 }
+    local inventoryComponent = Inventory:new(26)
+    local levelComponent = Level:new()
+    local equipmentComponent = Equipment:new()
+    local player = Entity:new {
+        x=x, y=y, char="@", color="white", name="Player", blocks=true, renderOrder=RenderOrder.ACTOR,
+        fighter=fighterComponent, inventory=inventoryComponent, level=levelComponent,
+        equipment=equipmentComponent
+    }
+    return player
+end
+
+function Entity:newEquipment(x, y, char, color, name, args)
+    local equippableComponent = Equippable:new(args)
+    local equipment = Entity:new { x=x, y=y, char=char, color=color, name=name, equippable=equippableComponent }
+    return equipment
+end
+
+function Entity:newStairs(x, y, char, floor)
+    local stairsComponent = Stairs:new(floor)
+    local stairs = Entity:new {
+        x = x, y = y, char = char, color = "white", name = "Stairs",
+        renderOrder = RenderOrder.STAIRS, stairs = stairsComponent
+    }
+    return stairs
 end
 
 return Entity

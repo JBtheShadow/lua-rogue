@@ -3,12 +3,6 @@ local constants = require "config.constants"
 local Entity = require "actors.Entity"
 local EntityList = require "actors.EntityList"
 
-local Fighter = require "components.Fighter"
-local Inventory = require "components.Inventory"
-local Level = require "components.Level"
-local Equipment = require "components.Equipment"
-local Equippable = require "components.Equippable"
-
 local RenderOrder = require "enums.RenderOrder"
 local EquipmentSlots = require "enums.EquipmentSlots"
 local GameStates = require "enums.GameStates"
@@ -17,20 +11,11 @@ local MessageLog = require "messages.MessageLog"
 
 math.randomseed(os.time())
 
-local fighterComponent = Fighter:new { hp=100, defense=1, power=2, speed=4 }
-local inventoryComponent = Inventory:new(26)
-local levelComponent = Level:new()
-local equipmentComponent = Equipment:new()
-local player = Entity:new {
-    x=0, y=0, char="@", color="white", name="Player", blocks=true, renderOrder=RenderOrder.ACTOR,
-    fighter=fighterComponent, inventory=inventoryComponent, level=levelComponent,
-    equipment=equipmentComponent
-}
 local entities = EntityList:new()
+local player = Entity:newPlayer(0, 0)
 entities:append(player)
 
-local equippableComponent = Equippable:new { slot=EquipmentSlots.MAIN_HAND, powerBonus=2 }
-local dagger = Entity:new { x=0, y=0, char="-", color="sky", name="Dagger", equippable=equippableComponent }
+local dagger = Entity:newEquipment(0, 0, "-", "sky", "Dagger", { slot=EquipmentSlots.MAIN_HAND, powerBonus=2 })
 player.inventory:addItem(dagger)
 player.equipment:toggleEquip(dagger)
 
