@@ -1,4 +1,4 @@
-local Node = require "maps/Node"
+local Node = require "maps.Node"
 
 local Rect = { x1, y1, x2, y2 }
 

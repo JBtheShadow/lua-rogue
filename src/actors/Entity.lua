@@ -1,7 +1,7 @@
-local RenderOrder = require "enums/RenderOrder"
-local Item = require "components/Item"
-local CollisionMap = require "maps/CollisionMap"
-local Node = require "maps/Node"
+local RenderOrder = require "enums.RenderOrder"
+local Item = require "components.Item"
+local CollisionMap = require "maps.CollisionMap"
+local Node = require "maps.Node"
 
 local Entity = { x, y, char, color, name, blocks, renderOrder, fighter, ai, item, inventory, stairs, level, equipment, equippable }
 

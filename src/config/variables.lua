@@ -1,19 +1,19 @@
-local constants = require "config/constants"
+local constants = require "config.constants"
 
-local Entity = require "actors/Entity"
-local EntityList = require "actors/EntityList"
+local Entity = require "actors.Entity"
+local EntityList = require "actors.EntityList"
 
-local Fighter = require "components/Fighter"
-local Inventory = require "components/Inventory"
-local Level = require "components/Level"
-local Equipment = require "components/Equipment"
-local Equippable = require "components/Equippable"
+local Fighter = require "components.Fighter"
+local Inventory = require "components.Inventory"
+local Level = require "components.Level"
+local Equipment = require "components.Equipment"
+local Equippable = require "components.Equippable"
 
-local RenderOrder = require "enums/RenderOrder"
-local EquipmentSlots = require "enums/EquipmentSlots"
-local GameStates = require "enums/GameStates"
+local RenderOrder = require "enums.RenderOrder"
+local EquipmentSlots = require "enums.EquipmentSlots"
+local GameStates = require "enums.GameStates"
 
-local MessageLog = require "messages/MessageLog"
+local MessageLog = require "messages.MessageLog"
 
 math.randomseed(os.time())
 

@@ -1,4 +1,4 @@
-local Message = require "messages/Message"
+local Message = require "messages.Message"
 
 local ConfusedMonster = { owner }
 

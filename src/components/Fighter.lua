@@ -1,5 +1,5 @@
-require "utils/stringUtils"
-local Message = require "messages/Message"
+require "utils.stringUtils"
+local Message = require "messages.Message"
 
 local Fighter = {
     owner,

@@ -115,27 +115,39 @@ function diceRoll(count, sides)
     return runningSum
 end
 
-local function printRollHeader(rolls, min, max, range)
-    local dice
-    if range.dice1Count == 0 then
-        dice = string.format("%d", range.diceMod)
-    elseif range.dice2Count == 0 then
-        if range.diceMod == 0 then
-            dice = string.format("%dd%d", range.dice1Count, range.dice1)
-        elseif range.diceMod > 0 then
-            dice = string.format("%dd%d+%d", range.dice1Count, range.dice1, range.diceMod)
-        else
-            dice = string.format("%dd%d%d", range.dice1Count, range.dice1, range.diceMod)
-        end
+local function mainDiceString(count, sides)
+    if count == 0 or sides == 0 then
+        return ""
+    elseif count == 1 then
+        return string.format("d%d", sides)
     else
-        if range.diceMod == 0 then
-            dice = string.format("%dd%d+%dd%d", range.dice1Count, range.dice1, range.dice2Count, range.dice2)
-        elseif range.diceMod > 0 then
-            dice = string.format("%dd%d+%dd%d+%d", range.dice1Count, range.dice1, range.dice2Count, range.dice2, range.diceMod)
-        else
-            dice = string.format("%dd%d+%dd%d%d", range.dice1Count, range.dice1, range.dice2Count, range.dice2, range.diceMod)
-        end
+        return string.format("%dd%d", count, sides)
     end
+end
+
+local function sideDiceString(count, sides)
+    if count == 0 or sides == 0 then
+        return ""
+    else
+        return string.format("+%s", mainDiceString(count, sides))
+    end
+end
+
+local function modString(mod)
+    if mod == 0 then
+        return ""
+    elseif mod < 0 then
+        return string.format("%d", mod)
+    else
+        return string.format("+%d", mod)
+    end
+end
+
+local function printRollHeader(rolls, min, max, range)
+    local dice = string.format("%s%s%s",
+        mainDiceString(range.dice1Count, range.dice1),
+        sideDiceString(range.dice2Count, range.dice2),
+        modString(range.diceMod))
     io.write(string.format("%d rolls of [%d,%d] with %s = ", rolls, min, max, dice))
 end
 
@@ -152,3 +164,25 @@ local function test(rolls, min, max)
     printRollHeader(rolls, min, max, range)
     printRollResults(results)
 end
+
+test(10, 1, 6)
+test(10, 2, 7)
+test(10, 3, 8)
+test(10, 0, 5)
+test(10, -2, 3)
+test(10, 2, 12)
+test(10, 3, 18)
+test(10, 1, 4)
+test(10, 2, 8)
+test(10, 3, 12)
+test(10, 4, 16)
+test(10, 5, 20)
+test(10, 9, 32)
+test(10, 1, 30)
+test(10, 2, 60)
+test(10, 3, 90)
+test(10, 4, 120)
+test(10, 5, 150)
+test(10, 6, 180)
+test(10, 7, 210)
+test(10, 10, 900)

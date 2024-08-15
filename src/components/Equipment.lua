@@ -1,4 +1,4 @@
-local EquipmentSlots = require "enums/EquipmentSlots"
+local EquipmentSlots = require "enums.EquipmentSlots"
 
 local Equipment = { mainHand, offHand }
 

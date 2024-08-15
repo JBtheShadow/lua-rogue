@@ -1,6 +1,6 @@
-local Node = require "maps/Node"
-local NodeList = require "maps/NodeList"
-local NodeMap = require "maps/NodeMap"
+local Node = require "maps.Node"
+local NodeList = require "maps.NodeList"
+local NodeMap = require "maps.NodeMap"
 
 local CollisionMap = { width, height, map }
 

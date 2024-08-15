@@ -1,4 +1,4 @@
-local Node = require "maps/Node"
+local Node = require "maps.Node"
 
 local NodeMap = { map, defaultValue }
 

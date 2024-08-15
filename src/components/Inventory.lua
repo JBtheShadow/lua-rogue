@@ -1,5 +1,5 @@
-require "utils/optionUtils"
-local Message = require "messages/Message"
+require "utils.optionUtils"
+local Message = require "messages.Message"
 
 local Inventory = { capacity, items, owner }
 
