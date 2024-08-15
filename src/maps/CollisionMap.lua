@@ -1,6 +1,7 @@
 local Node = require "maps.Node"
 local NodeList = require "maps.NodeList"
 local NodeMap = require "maps.NodeMap"
+local Tile = require "maps.Tile"
 
 local CollisionMap = { width, height, map }
 
@@ -11,15 +12,34 @@ function CollisionMap:new(width, height)
     obj.map = NodeMap:new()
     for y = 1, height do
         for x = 1, width do
-            obj:setProps(x, y, false, false)
+            local tile = Tile:new()
+            obj:setProps(x, y, tile)
         end
     end
     return obj
 end
 
-function CollisionMap:setProps(x, y, blockSight, blocked)
+function CollisionMap:newFromMap(gameMap)
+    local obj = setmetatable({}, {__index = self})
+    obj.width = width
+    obj.height = height
+    obj.map = NodeMap:new()
+    for y = 1, gameMap.height do
+        for x = 1, gameMap.width do
+            local tile = gameMap:getTile(x, y)
+            fov:setProps(x, y, tile)
+        end
+    end
+    return obj
+end
+
+function CollisionMap:setProps(x, y, tile)
     local node = Node:new(x, y)
-    self.map:set(node, { blockSight = blockSight, blocked = blocked })
+    self.map:set(node, tile)
+end
+
+function CollisionMap:recalculate(x, y, radius, lightWalls)
+    -- TODO
 end
 
 function CollisionMap:getNeighbors(node)

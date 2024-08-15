@@ -90,14 +90,7 @@ function Entity:distance(x, y)
 end
 
 function Entity:moveAround(target, entities, gameMap)
-    local fov = CollisionMap:new(gameMap.width, gameMap.height)
-
-    for y = 1, gameMap.height do
-        for x = 1, gameMap.width do
-            local tile = gameMap:getTile(x, y)
-            fov:setProps(tile.x, tile.y, tile.blockSight, tile.blocked)
-        end
-    end
+    local fov = CollisionMap:newFromMap(gameMap)
 
     for _, entity in ipairs(entities) do
         if entity.blocks and entity ~= self and entity ~= target then

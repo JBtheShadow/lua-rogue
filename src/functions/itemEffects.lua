@@ -1,4 +1,5 @@
 local Message = require "messages.Message"
+local ConfusedMonster = require "components.ai.ConfusedMonster"
 
 local obj = {}
 obj.heal = function(args)
@@ -47,6 +48,68 @@ obj.castLightning = function(args)
         end
     else
         table.insert(results, { consumed = false, target, message = Message:new("No enemy is close enough to strike.", "red") })
+    end
+
+    return results
+end
+
+obj.castFireball = function(args)
+    local entities = args.entities
+    local fovMap = args.fovMap
+    local damage = args.damage
+    local radius = args.radius
+    local targetX = args.targetX
+    local targetY = args.targetY
+
+    local results = {}
+
+    if not fovMap:isInFieldOfView(targetX, targetY) then
+        table.insert(results, { consumed = false, message = Message:new("You cannot target a tile outside of your field of view.", "yellow") })
+        return results
+    end
+
+    table.insert(results, { consumed = true, message = Message:new(string.format("the fireball explodes, burning everything within %d tiles!", radius), "orange") })
+
+    for _, entity in ipairs(entities) do
+        if entity:distance(targetX, targetY) <= radius and entity.fighter then
+            table.insert(results, { message = Message:new(str.format("The %s gets burned for %d hit points.", entity.name, damage), "orange") })
+            for _, result in entity.fighter:takeDamage(damage) do
+                table.insert(results, result)
+            end
+        end
+    end
+
+    return results
+end
+
+obj.castConfuse = function(args)
+    local entities = args.entities
+    local fovMap = args.fovMap
+    local targetX = args.targetX
+    local targetY = args.targetY
+
+    local results = {}
+
+    if not fovMap:isInFieldOfView(targetX, targetY) then
+        table.insert(results, { consumed = false, message = Message:new("You cannot target a tile outside of your field of view.", "yellow") })
+        return results
+    end
+
+    local found = false
+    for _, entity in ipairs(entities) do
+        if entity.x == targetX and entity.y == targetY and entity.ai then
+            found = true
+            local confusedAi = ConfusedMonsters:new(entityAi, 10)
+
+            confusedAi.owner = entity
+            entity.ai = confusedAi
+
+            table.insert(results, { consumed = true, message = Message:new(string.format("The eyes of the %s look vacant, as he starts to stumble around!", entity.name, "lightgreen")) })
+            break
+        end
+    end
+    if not found then
+        table.insert(results, { consumed = false, message = Message:new("There is no targetable enemy at that location.", "yellow") })
     end
 
     return results
