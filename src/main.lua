@@ -1,5 +1,10 @@
 function love.load()
     local variables = require "config.variables"
+    local font = love.graphics.newImageFont("img/love-font.png",
+        " abcdefghijklmnopqrstuvwxyz" ..
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
+        "123456789.,!?-+/():;%&`'*#=[]\"")
+    love.graphics.setFont(font)
 end
 
 function love.update(dt)
