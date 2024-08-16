@@ -6,6 +6,7 @@ local EntityList = require "actors.EntityList"
 local RenderOrder = require "enums.RenderOrder"
 local EquipmentSlots = require "enums.EquipmentSlots"
 local GameStates = require "enums.GameStates"
+local Colors = require "enums.Colors"
 
 local GameMap = require "maps.GameMap"
 
@@ -17,7 +18,7 @@ local entities = EntityList:new()
 local player = Entity:newPlayer(0, 0)
 entities:append(player)
 
-local dagger = Entity:newEquipment(0, 0, "-", "sky", "Dagger", { slot=EquipmentSlots.MAIN_HAND, powerBonus=2 })
+local dagger = Entity:newEquipment(0, 0, "-", Colors.SKY, "Dagger", { slot=EquipmentSlots.MAIN_HAND, powerBonus=2 })
 player.inventory:addItem(dagger)
 player.equipment:toggleEquip(dagger)
 

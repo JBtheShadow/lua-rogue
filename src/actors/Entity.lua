@@ -1,11 +1,13 @@
 local RenderOrder = require "enums.RenderOrder"
-local Item = require "components.Item"
+local Colors = require "enums.Colors"
+
 local CollisionMap = require "maps.CollisionMap"
 local Node = require "maps.Node"
 
 local BasicMonster = require "components.ai.BasicMonster"
 local Fighter = require "components.Fighter"
 local Inventory = require "components.Inventory"
+local Item = require "components.Item"
 local Level = require "components.Level"
 local Equipment = require "components.Equipment"
 local Equippable = require "components.Equippable"
@@ -20,7 +22,7 @@ function Entity:new(args)
         error("no y")
     elseif type(args.char) ~= "string" then
         error("no char")
-    elseif type(args.color) == "nil" then
+    elseif type(args.color) ~= "table" then
         error("no color")
     elseif type(args.name) ~= "string" then
         error("no name")
@@ -136,7 +138,7 @@ function Entity:newPlayer(x, y)
     local levelComponent = Level:new()
     local equipmentComponent = Equipment:new()
     local player = Entity:new {
-        x=x, y=y, char="@", color="white", name="Player", blocks=true, renderOrder=RenderOrder.ACTOR,
+        x=x, y=y, char="@", color=Colors.WHITE, name="Player", blocks=true, renderOrder=RenderOrder.ACTOR,
         fighter=fighterComponent, inventory=inventoryComponent, level=levelComponent,
         equipment=equipmentComponent
     }
@@ -147,7 +149,7 @@ function Entity:newMonster(x, y, char, color, name, args)
     local fighterComponent = Fighter:new(args)
     local aiComponent = BasicMonster:new()
     local monster = Entity:new {
-        x=x, y=y, char=char, color=color, name=name, blocks=true,
+        x=x, y=y, char=char, color=Colors.WHITE, name=name, blocks=true,
         renderOrder=RenderOrder.ACTOR, fighter=fighterComponent, ai=aiComponent
     }
     return monster
@@ -155,7 +157,7 @@ end
 
 function Entity:newGoldPile(x, y, amount)
     local itemComponent = Item:new { args={ canStack=true, amount=amount }}
-    local item = Entity:new { x=x, y=y, char="$", color="yellow", name="Gold Coin", renderOrder=RenderOrder.ITEM, item=itemComponent }
+    local item = Entity:new { x=x, y=y, char="$", color=Colors.GOLD, name="Gold Coin", renderOrder=RenderOrder.ITEM, item=itemComponent }
     return item
 end
 
@@ -174,7 +176,7 @@ end
 function Entity:newStairs(x, y, char, floor)
     local stairsComponent = Stairs:new(floor)
     local stairs = Entity:new {
-        x = x, y = y, char = char, color = "white", name = "Stairs",
+        x = x, y = y, char = char, color = Colors.WHITE, name = "Stairs",
         renderOrder = RenderOrder.STAIRS, stairs = stairsComponent
     }
     return stairs

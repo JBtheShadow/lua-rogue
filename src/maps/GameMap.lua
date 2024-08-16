@@ -23,6 +23,7 @@ local Node = require "maps.Node"
 
 local EquipmentSlots = require "enums.EquipmentSlots"
 local RenderOrder = require "enums.RenderOrder"
+local Colors = require "enums.Colors"
 
 local GameMap = { width, height, level }
 
@@ -181,9 +182,9 @@ function GameMap:placeEntities(room, entities)
 
             local monster
             if monsterChoice == "orc" then
-                monster = Entity:newMonster(x, y, 'o', "olivegreen", "Orc", { hp=20, defense=0, power=4, speed=3, xp=35 })
+                monster = Entity:newMonster(x, y, 'o', Colors.OLIVEGREEN, "Orc", { hp=20, defense=0, power=4, speed=3, xp=35 })
             elseif monsterChoice == "troll" then
-                monster = Entity:newMonster(x, y, 'T', "darkgreen", "Troll", { hp=30, defense=2, power=8, speed=2, xp=100 })
+                monster = Entity:newMonster(x, y, 'T', Colors.DARKGREEN, "Troll", { hp=30, defense=2, power=8, speed=2, xp=100 })
             end
 
             table.insert(entities, monster)
@@ -206,26 +207,26 @@ function GameMap:placeEntities(room, entities)
 
             local item
             if itemChoice == "healingPotion" then
-                item = Entity:newItem(x, y, "!", "violet", "Healing Potion", { onUse=itemEffects.heal, args={ amount= 40} })
+                item = Entity:newItem(x, y, "!", Colors.VIOLET, "Healing Potion", { onUse=itemEffects.heal, args={ amount= 40} })
             elseif itemChoice == "money" then
                 item = Entity:newGoldPile(x, y, rangeRoll(self.level, self.level * 30))
             elseif itemChoice == "sword" then
-                item = Entity:newEquipment(x, y, "/", "sky", "Sword", { slot=EquipmentSlots.MAIN_HAND, powerBonus=3 })
+                item = Entity:newEquipment(x, y, "/", Colors.SKY, "Sword", { slot=EquipmentSlots.MAIN_HAND, powerBonus=3 })
             elseif itemChoice == "shield" then
-                item = Entity:newEquipment(x, y, "[", "darkorange", "Shield", { slot=EquipmentSlots.OFF_HAND, defenseBonus=1 })
+                item = Entity:newEquipment(x, y, "[", Colors.DARKORANGE, "Shield", { slot=EquipmentSlots.OFF_HAND, defenseBonus=1 })
             elseif itemChoice == "fireballScroll" then
-                item = Entity:newItem(x, y, "#", "red", "Fireball Scroll", {
+                item = Entity:newItem(x, y, "#", Colors.RED, "Fireball Scroll", {
                     onUse=itemEffects.castFireball, targeting=true,
                     targetingMessage=Message:new("Left-click a target tile for the fireball, or right-click to cancel.", "lightcyan"),
                     args={ damage=25, radius=3 }
                 })
             elseif itemChoice == "confusionScroll" then
-                item = Entity:newItem(x, y, "#", "lightpink", "Confusion Scroll", {
+                item = Entity:newItem(x, y, "#", Colors.LIGHTPINK, "Confusion Scroll", {
                     onUse=itemEffects.castConfuse, targeting=true,
                     targetingMessage=Message:new("Left-click an enemy to confuse it, or right-click to cancel.", "lightcyan")
                 })
             elseif itemChoice == "lightningScroll" then
-                item = Entity:newItem(x, y, "#", "yellow", "Lightning Scroll", { onUse=itemEffects.castLightning, args={ damage=40, maxRange=5 } })
+                item = Entity:newItem(x, y, "#", Colors.YELLOW, "Lightning Scroll", { onUse=itemEffects.castLightning, args={ damage=40, maxRange=5 } })
             end
 
             table.insert(entities, item)

@@ -1,3 +1,5 @@
+local Colors = require "enums.Colors"
+
 local constants, variables
 local font, fontSize
 local screenWidth, screenHeight
@@ -59,9 +61,19 @@ end
 function drawTitle()
     love.graphics.push()
     love.graphics.scale(2, 2)
+    setColor(Colors.YELLOW)
     love.graphics.printf("TOMBS OF THE ANCIENT KINGS", 0, screenHeight / 4 - 4 * fontSize, screenWidth / 2, "center")
+    setColor(Colors.WHITE)
     love.graphics.pop()
     love.graphics.printf("by JBtheShadow", 0, screenHeight / 2 - 3 * fontSize, screenWidth, "center")
+end
+
+function setColor(color, alpha)
+    love.graphics.setColor(color.r, color.g, color.b, alpha or 1)
+end
+
+function setBackgroundColor(color, alpha)
+    love.graphics.setBackgroundColor(color.r, color.g, color.b, alpha or 1)
 end
 
 function drawMessageBox(text, width)
