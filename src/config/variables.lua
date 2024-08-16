@@ -7,6 +7,8 @@ local RenderOrder = require "enums.RenderOrder"
 local EquipmentSlots = require "enums.EquipmentSlots"
 local GameStates = require "enums.GameStates"
 
+local GameMap = require "maps.GameMap"
+
 local MessageLog = require "messages.MessageLog"
 
 math.randomseed(os.time())
@@ -20,7 +22,7 @@ player.inventory:addItem(dagger)
 player.equipment:toggleEquip(dagger)
 
 local gameMap = GameMap:new(constants.map.width, constants.map.height)
-gameMap.makeMap(constants.rooms.max, constants.rooms.size.min, constants.rooms.size.max, constants.map.width, constants.map.height, player, entities)
+gameMap:generate(constants.rooms.max, constants.rooms.size.min, constants.rooms.size.max, constants.map.width, constants.map.height, player, entities)
 
 local messageLog = MessageLog:new(constants.message.x, constants.message.width, constants.message.height)
 

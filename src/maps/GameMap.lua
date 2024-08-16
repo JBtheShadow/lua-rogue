@@ -5,7 +5,7 @@ local Equipment = require "components.Equipment"
 local Equippable = require "components.Equippable"
 local Fighter = require "components.Fighter"
 local Item = require "components.Item"
-local Stairs = require "component.Stairs"
+local Stairs = require "components.Stairs"
 
 local Entity = require "actors.Entity"
 local EntityList = require "actors.EntityList"
@@ -19,6 +19,7 @@ local Tile = require "maps.Tile"
 local ChoiceTable = require "maps.ChoiceTable"
 local LevelTable = require "maps.LevelTable"
 local NodeMap = require "maps.NodeMap"
+local Node = require "maps.Node"
 
 local EquipmentSlots = require "enums.EquipmentSlots"
 local RenderOrder = require "enums.RenderOrder"
@@ -72,23 +73,23 @@ function GameMap:generate(maxRooms, roomMinSize, roomMaxSize, mapWidth, mapHeigh
         if not intersects then
             self:createRoom(newRoom)
 
-            local newX, newY = newRoom:center()
+            local new = newRoom:center()
 
-            centerLastRoomX = newX
-            centerLastRoomY = newY
+            centerLastRoomX = new.x
+            centerLastRoomY = new.y
 
             if numRooms == 0 then
-                player.x = newX
-                player.y = newY
+                player.x = new.x
+                player.y = new.y
             else
-                local prevX, prevY = rooms[#rooms]:center()
+                local prev = rooms[#rooms]:center()
 
                 if math.random(0, 1) == 1 then
-                    self:createHTunnel(prevX, newX, prevY)
-                    self:createVTunnel(prevY, newY, newX)
+                    self:createHTunnel(prev.x, new.x, prev.y)
+                    self:createVTunnel(prev.y, new.y, new.x)
                 else
-                    self:createVTunnel(prevY, newY, prevX)
-                    self.createHTunnel(prevX, newX, newY)
+                    self:createVTunnel(prev.y, new.y, prev.x)
+                    self:createHTunnel(prev.x, new.x, new.y)
                 end
             end
 
@@ -99,9 +100,9 @@ function GameMap:generate(maxRooms, roomMinSize, roomMaxSize, mapWidth, mapHeigh
         end
     end
 
-    local centerFirstX, centerFirstY = rooms[1]:center()
+    local centerFirst = rooms[1]:center()
 
-    local upStairs = Entity:newStairs(centerFirstX - 1, centerFirstY - 1, "<")
+    local upStairs = Entity:newStairs(centerFirst.x - 1, centerFirst.y - 1, "<")
     entities:append(upStairs)
 
     local downStairs = Entity:newStairs(centerLastRoomX, centerLastRoomY, ">", self.level + 1)
@@ -114,6 +115,7 @@ function GameMap:getTile(x, y)
 end
 
 function GameMap:setTile(x, y, blocked, blockSight)
+    local node = Node:new(x, y)
     local tile = self:getTile(x, y)
     tile.blocked = blocked
     tile.blockSight = blockSight
@@ -149,17 +151,18 @@ function GameMap:placeEntities(room, entities)
 
     local monsterChances = ChoiceTable:new {
         orc = 80,
-        troll = LevelTable:new({3, 15}, {5, 30}, {7, 60}):getChanceByLevel(self.level)
+        troll = LevelTable:new({{3, 15}, {5, 30}, {7, 60}}):getChanceByLevel(self.level)
     }
+    print(table.concat(monsterChances, ", "))
 
     local itemChances = ChoiceTable:new {
         money = 20,
         healingPotion = 35,
         sword = LevelTable:new({{4, 5}}):getChanceByLevel(self.level),
         shield = LevelTable:new({{8, 15}}):getChanceByLevel(self.level),
-        lightningScroll = LevelTable({{4, 25}}):getChanceByLevel(self.level),
-        fireballScroll = LevelTable({{6, 25}}):getChanceByLevel(self.level),
-        confusionScroll = LevelTable({{2, 10}}):getChanceByLevel(self.level)
+        lightningScroll = LevelTable:new({{4, 25}}):getChanceByLevel(self.level),
+        fireballScroll = LevelTable:new({{6, 25}}):getChanceByLevel(self.level),
+        confusionScroll = LevelTable:new({{2, 10}}):getChanceByLevel(self.level)
     }
 
     for _ = 1, numberMonsters do
@@ -245,7 +248,7 @@ function GameMap:nextFloor(player, messageLog, constants)
     entities:append(player)
 
     self.tiles = self:initializeTiles()
-    self:makeMap(constants.rooms.max, constants.rooms.size.min, constants.rooms.size.max, constants.map.width, constants.map.height, player, entities)
+    self:generate(constants.rooms.max, constants.rooms.size.min, constants.rooms.size.max, constants.map.width, constants.map.height, player, entities)
 
     player.fighter:heal(math.floor(player.fighter.maxHp() / 2))
 

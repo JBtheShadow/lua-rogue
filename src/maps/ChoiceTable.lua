@@ -7,7 +7,7 @@ function ChoiceTable:new(choiceList)
     local val = 0
     for choice, chance in pairs(choiceList) do
         if chance > 0 then
-            obj.table[choice] = { min = val + 1, max = val + chance }
+            table.insert(obj.table, { choice = choice, min = val + 1, max = val + chance })
             val = val + chance
         end
     end
@@ -15,10 +15,13 @@ function ChoiceTable:new(choiceList)
 end
 
 function ChoiceTable:getChoice()
+    if not #self.table then
+        return nil
+    end
     local val = math.random(1, self.table[#self.table].max)
-    for choice, chance in pairs(self.table) do
+    for _, chance in pairs(self.table) do
         if chance.min <= val and val <= chance.max then
-            return choice
+            return chance.choice
         end
     end
     return nil
