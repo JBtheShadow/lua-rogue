@@ -43,8 +43,6 @@ function love.draw()
     else
         drawGame()
     end
-
-    love.graphics.print("Hurray, it loaded!")
 end
 
 function drawMainMenu()
