@@ -106,6 +106,10 @@ function Inventory:dropItem(item)
 end
 
 function Inventory:getOptions()
+    if not #self.items then
+        return { "Inventory is empty. "}
+    end
+
     local options = {}
     local equipOptions = {}
     local resultOptions = {}
