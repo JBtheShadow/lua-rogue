@@ -9,12 +9,16 @@ local showLoadErrorMessage = false
 local mainMenuBackgroundImage
 
 function love.load()
-    constants = require "config.constants"
-    variables = require "config.variables"
     setFont()
+    loadConstants()
+    loadVariables()
+    loadBackgroundImage()
+end
+
+function loadConstants()
+    constants = require "config.constants"
     screenWidth = constants.screen.width * fontSize
     screenHeight = constants.screen.height * fontSize
-    loadBackgroundImage()
 end
 
 function setFont()
@@ -25,6 +29,17 @@ function setFont()
     fontSize = 17
     love.graphics.setFont(font)
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
+end
+
+function loadVariables()
+    variables = require "config.variables"
+    player = variables.player
+    entities = variables.entities
+    gameMap = variables.gameMap
+    messageLog = variables.messageLog
+    messageLog.font = font
+    messageLog.fontSize = fontSize
+    gameState = variables.gameState
 end
 
 function loadBackgroundImage()
@@ -63,7 +78,7 @@ function drawTitle()
     love.graphics.printf("TOMBS OF THE ANCIENT KINGS", 0, screenHeight / 4 - 4 * fontSize, screenWidth / 2, "center")
     setColor(Colors.WHITE)
     love.graphics.pop()
-    love.graphics.printf("by JBtheShadow", 0, screenHeight / 2 - 3 * fontSize, screenWidth, "center")
+    love.graphics.printf("by JBtheShadow", 0, screenHeight / 2 - 5.5 * fontSize, screenWidth, "center")
 end
 
 function setColor(color, alpha)
