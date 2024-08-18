@@ -15,4 +15,18 @@ function Equippable:new(args)
     return obj
 end
 
+function Equippable:toSaveData()
+    return {
+        slot = self.slot,
+        powerBonus = self.powerBonus,
+        defenseBonus = self.defenseBonus,
+        speedBonus = self.speedBonus,
+        maxHpBonus = self.maxHpBonus
+    }
+end
+
+function Equippable:fromSaveData(data)
+    return Equippable:new(data)
+end
+
 return Equippable

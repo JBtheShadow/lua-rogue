@@ -1,4 +1,7 @@
+require "utils.stringUtils"
+
 local Node = require "maps.Node"
+local Tile = require "maps.Tile"
 
 local NodeMap = { map, defaultValue }
 
@@ -40,6 +43,25 @@ function NodeMap:pathTo(current)
         table.insert(totalPath, 1, current)
     end
     return totalPath
+end
+
+function NodeMap:toSaveData()
+    local data = {
+        map = {},
+        defaultValue = self.defaultValue
+    }
+    for key, value in pairs(self.map) do
+        data.map[key] = value:toSaveData()
+    end
+    return data
+end
+
+function NodeMap:fromSaveData(data)
+    local map = NodeMap:new(data.defaultValue)
+    for key, value in pairs(data.map) do
+        local node = Node:fromId(key)
+        map:set(node, Tile:fromSaveData(value))
+    end
 end
 
 return NodeMap

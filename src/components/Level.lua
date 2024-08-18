@@ -27,4 +27,17 @@ function Level:addXp(xp)
     end
 end
 
+function Level:toSaveData()
+    return {
+        currentLevel = self.currentLevel,
+        currentXp = self.currentXp,
+        levelUpBase = self.levelUpBase,
+        levelUpFactor = self.levelUpFactor
+    }
+end
+
+function Level:fromSaveData(data)
+    return Level:new(data.currentLevel, data.currentXp, data.levelUpBase, data.levelUpFactor)
+end
+
 return Level

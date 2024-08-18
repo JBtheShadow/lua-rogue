@@ -1,3 +1,5 @@
+local ItemEffects = require "enums.ItemEffects"
+
 local Item = { onUse, args, targeting, targetingMessage }
 
 function Item:new(args)
@@ -8,6 +10,24 @@ function Item:new(args)
     obj.targeting = args.targeting or false
     obj.targetingMessage = args.targetingMessage
     return obj
+end
+
+function Item:toSaveData()
+    return {
+        onUse = (self.onUse or {}).name,
+        args = self.args,
+        targeting = self.targeting,
+        targetingMessage = self.targetingMessage
+    }
+end
+
+function Item:fromSaveData(data)
+    return Item:new {
+        onUse = ItemEffects:fromName(data.onUse),
+        args = data.args,
+        targeting = data.targeting,
+        targetingMessage = data.targetingMessage
+    }
 end
 
 return Item

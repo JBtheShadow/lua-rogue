@@ -25,4 +25,12 @@ function BasicMonster:takeTurn(target, fovMap, gameMap, entities)
     return results
 end
 
+function BasicMonster:toSaveData()
+    return { type = "basicMonster" }
+end
+
+function BasicMonster:fromSaveData(data)
+    return BasicMonster:new()
+end
+
 return BasicMonster

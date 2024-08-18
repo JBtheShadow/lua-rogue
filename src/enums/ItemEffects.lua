@@ -1,8 +1,7 @@
 local Message = require "messages.Message"
 local ConfusedMonster = require "components.ai.ConfusedMonster"
 
-local obj = {}
-obj.heal = function(args)
+local function heal(args)
     local entity = args.entity
     local amount = args.amount
 
@@ -18,7 +17,7 @@ obj.heal = function(args)
     return results
 end
 
-obj.castLightning = function(args)
+local function castLightning(args)
     local caster = args.entity
     local entities = args.entities
     local fovMap = args.fovMap
@@ -53,7 +52,7 @@ obj.castLightning = function(args)
     return results
 end
 
-obj.castFireball = function(args)
+local function castFireball(args)
     local entities = args.entities
     local fovMap = args.fovMap
     local damage = args.damage
@@ -72,7 +71,7 @@ obj.castFireball = function(args)
 
     for _, entity in ipairs(entities) do
         if entity:distance(targetX, targetY) <= radius and entity.fighter then
-            table.insert(results, { message = Message:new(str.format("The %s gets burned for %d hit points.", entity.name, damage), "orange") })
+            table.insert(results, { message = Message:new(string.format("The %s gets burned for %d hit points.", entity.name, damage), "orange") })
             for _, result in entity.fighter:takeDamage(damage) do
                 table.insert(results, result)
             end
@@ -82,7 +81,7 @@ obj.castFireball = function(args)
     return results
 end
 
-obj.castConfuse = function(args)
+function castConfuse(args)
     local entities = args.entities
     local fovMap = args.fovMap
     local targetX = args.targetX
@@ -113,6 +112,22 @@ obj.castConfuse = function(args)
     end
 
     return results
+end 
+
+local ItemEffects = {
+    HEAL = { name = "heal", effect = heal },
+    CAST_LIGHTNING = { name = "castLightning", effect = castLightning },
+    CAST_FIREBALL = { name = "castFireball", effect = castFireball },
+    CAST_CONFUSE = { name = "castConfuse", effect = castConfuse }
+}
+
+function ItemEffects:fromName(name)
+    for _, effect in ipairs(ItemEffects) do
+        if effect.name == name then
+            return effect
+        end
+    end
+    return nil
 end
 
-return obj
+return ItemEffects

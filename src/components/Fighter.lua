@@ -1,12 +1,7 @@
 require "utils.stringUtils"
 local Message = require "messages.Message"
 
-local Fighter = {
-    owner,
-    base = { maxHp, defense, power, speed },
-    hp,
-    xp = 0
-}
+local Fighter = { owner, baseMaxHp, baseDefense, basePower, baseSpeed, hp, xp = 0 }
 
 function Fighter:new(args)
     if type(args.hp) ~= "number" then
@@ -21,10 +16,10 @@ function Fighter:new(args)
 
     local obj = setmetatable({}, {__index = self})
     obj.owner = nil
-    obj.base.maxHp = args.hp
-    obj.base.defense = args.defense
-    obj.base.power = args.power
-    obj.base.speed = args.speed
+    obj.baseMaxHp = args.hp
+    obj.baseDefense = args.defense
+    obj.basePower = args.power
+    obj.baseSpeed = args.speed
     obj.hp = args.hp
     obj.xp = args.xp or 0
     return obj
@@ -36,7 +31,7 @@ function Fighter:maxHp()
         bonus = self.owner.equipment:maxHpBonus()
     end
 
-    return self.base.maxHp + bonus
+    return self.baseMaxHp + bonus
 end
 
 function Fighter:power()
@@ -45,7 +40,7 @@ function Fighter:power()
         bonus = self.owner.equipment:powerBonus()
     end
        
-    return self.base.power + bonus
+    return self.basePower + bonus
 end
 
 function Fighter:defense()
@@ -54,7 +49,7 @@ function Fighter:defense()
         bonus = self.owner.equipment:defenseBonus()
     end
        
-    return self.base.defense + bonus
+    return self.baseDefense + bonus
 end
 
 function Fighter:speed()
@@ -63,7 +58,7 @@ function Fighter:speed()
         bonus = self.owner.equipment:speedBonus()
     end
        
-    return self.base.speed + bonus
+    return self.baseSpeed + bonus
 end
 
 function Fighter:takeDamage(amount)
@@ -105,6 +100,29 @@ function Fighter:attack(target)
     end
 
     return results
+end
+
+function Fighter:toSaveData()
+    return {
+        baseMaxHp = baseMaxHp,
+        baseDefense = baseDefense,
+        basePower = basePower,
+        baseSpeed = baseSpeed,
+        hp = hp,
+        xp = xp
+    }
+end
+
+function Fighter:fromSaveData(data)
+    local fighter = Fighter:new {
+        hp = data.baseMaxHp,
+        defense = data.baseDefense,
+        power = data.basePower,
+        speed = data.baseSpeed,
+        xp = data.xp
+    }
+    fighter.hp = data.hp
+    return fighter
 end
 
 return Fighter

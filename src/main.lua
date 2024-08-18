@@ -1,3 +1,5 @@
+require "utils.saveUtils"
+
 local Colors = require "enums.Colors"
 
 local constants, variables
@@ -13,6 +15,7 @@ function love.load()
     loadConstants()
     loadVariables()
     loadBackgroundImage()
+    testSave()
 end
 
 function loadConstants()
@@ -44,6 +47,10 @@ end
 
 function loadBackgroundImage()
     mainMenuBackgroundImage = love.graphics.newImage("img/menu_background.png")
+end
+
+function testSave()
+    saveGame(player, entities, gameMap, messageLog, gameState)
 end
 
 function love.update(dt)
@@ -82,11 +89,11 @@ function drawTitle()
 end
 
 function setColor(color, alpha)
-    love.graphics.setColor(color.r, color.g, color.b, alpha or 1)
+    love.graphics.setColor(color.color.r, color.color.g, color.color.b, alpha or 1)
 end
 
 function setBackgroundColor(color, alpha)
-    love.graphics.setBackgroundColor(color.r, color.g, color.b, alpha or 1)
+    love.graphics.setBackgroundColor(color.color.r, color.color.g, color.color.b, alpha or 1)
 end
 
 function drawMessageBox(text, width)

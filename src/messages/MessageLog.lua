@@ -1,13 +1,11 @@
 local MessageLog = { messages, x, width, height, font, fontSize }
 
-function MessageLog:new(x, width, height, font)
+function MessageLog:new(x, width, height)
     local obj = setmetatable({}, {__index = self})
     obj.messages = {}
     obj.x = x
     obj.width = width
     obj.height = height
-    obj.font = font
-    obj.fontSize = fontSize
     return obj
 end
 
@@ -22,6 +20,27 @@ function MessageLog:addMessage(message)
 
         table.insert(self.messages, Message:new(line, message.color))
     end
+end
+
+function MessageLog:toSaveData()
+    local data = {
+        messages = {},
+        x = self.x,
+        width = self.width,
+        height = self.height
+    }
+    for _, message in ipairs(self.messages) do
+        table.insert(data.messages, message:toSaveData())
+    end
+    return data
+end
+
+function MessageLog:fromSaveData(data)
+    local log = MessageLog:new(data.x, data.width, data.height)
+    for _, value in ipairs(data.messages) do
+        log:addMessage(Message:fromSaveData(value))
+    end
+    return log
 end
 
 return MessageLog

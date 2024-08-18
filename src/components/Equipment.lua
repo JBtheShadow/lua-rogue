@@ -99,4 +99,15 @@ function Equipment:toggleEquip(equippableEntity)
     return results
 end
 
+function Equipment:toSaveData()
+    return {
+        mainHand = (self.mainHand or {}).name,
+        offHand = (self.offHand or {}).name
+    }
+end
+
+function Equipment:fromSaveData(data)
+    return Equipment:new(data.mainHand, data.offHand)
+end
+
 return Equipment

@@ -5,6 +5,7 @@ local CollisionMap = require "maps.CollisionMap"
 local Node = require "maps.Node"
 
 local BasicMonster = require "components.ai.BasicMonster"
+local UnknownMonster = require "components.ai.UnknownMonster"
 local Fighter = require "components.Fighter"
 local Inventory = require "components.Inventory"
 local Item = require "components.Item"
@@ -71,6 +72,8 @@ function Entity:new(args)
         if not obj.item then
             local item = Item:new()
             obj.item = item
+            obj.item.owner = obj
+        elseif obj.item.owner == nil then
             obj.item.owner = obj
         end
     end
@@ -180,6 +183,88 @@ function Entity:newStairs(x, y, char, floor)
         renderOrder = RenderOrder.STAIRS, stairs = stairsComponent
     }
     return stairs
+end
+
+function Entity:toSaveData()
+    local data = {}
+    data.x = self.x
+    data.y = self.y
+    data.char = self.char
+    data.color = self.color.name
+    data.name = self.name
+    data.blocks = self.blocks
+    data.renderOrder = self.renderOrder
+    if self.fighter then
+        data.fighter = self.fighter:toSaveData()
+    end
+    if self.ai then
+        data.ai = self.ai:toSaveData()
+    end
+    if self.item then
+        data.item = self.item:toSaveData()
+    end
+    if self.inventory then
+        data.inventory = self.inventory:toSaveData()
+    end
+    if self.stairs then
+        data.stairs = self.stairs:toSaveData()
+    end
+    if self.level then
+        data.level = self.level:toSaveData()
+    end
+    if self.equipment then
+        data.equipment = self.equipment:toSaveData()
+    end
+    if self.equippable then
+        data.equippable = self.equippable:toSaveData()
+    end
+    return data
+end
+
+function Entity:fromSaveData(data)
+    local fighter, ai, item, inventory, stairs, level, equipment, equippable
+    if data.fighter then
+        fighter = Fighter:fromSaveData(data.fighter)
+    end
+    if data.ai then
+        ai = UnknownMonster:fromSaveData(data.ai)
+    end
+    if data.item then
+        item = Item:fromSaveData(data.item)
+    end
+    if data.inventory then
+        inventory = Inventory:fromSaveData(data.inventory)
+    end
+    if data.stairs then
+        stairs = Stairs:fromSaveData(data.stairs)
+    end
+    if data.level then
+        level = Level:fromSaveData(data.level)
+    end
+    if data.equipment then
+        data.equipment.mainHand, data.equipment.offHand = inventory:getEquippedHands(data.equipment.mainHand, data.equipment.offHand)
+        equipment = Equipment:fromSaveData(data.equipment)
+    end
+    if data.equippable then
+        equippable = Equippable:fromSaveData(data.equippable)
+    end
+    return Entity:new {
+        x = data.x,
+        y = data.y,
+        char = data.char,
+        color = Colors:fromName(data.color),
+        name = data.name,
+        blocks = data.blocks,
+        renderOrder = data.renderOrder,
+        fighter = fighter,
+        ai = ai,
+        item = item,
+        inventory = inventory,
+        stairs = stairs,
+        level = level,
+        equipment = equipment,
+        equippable = equippable
+    }
 end
 
 return Entity

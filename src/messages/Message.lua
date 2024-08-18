@@ -9,4 +9,16 @@ function Message:new(text, color)
     return obj
 end
 
+function Message:toSaveData()
+    return {
+        text = self.text,
+        color = self.color.name
+    }
+end
+
+function Message:fromSaveData(data)
+    local color = Colors:fromName(data.color)
+    return Message:new(data.text, color)
+end
+
 return Message

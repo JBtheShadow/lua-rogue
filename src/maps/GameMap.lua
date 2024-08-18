@@ -12,8 +12,6 @@ local EntityList = require "actors.EntityList"
 
 local Message = require "messages.Message"
 
-local itemEffects = require "functions.itemEffects"
-
 local Rect = require "maps.Rect"
 local Tile = require "maps.Tile"
 local ChoiceTable = require "maps.ChoiceTable"
@@ -24,8 +22,9 @@ local Node = require "maps.Node"
 local EquipmentSlots = require "enums.EquipmentSlots"
 local RenderOrder = require "enums.RenderOrder"
 local Colors = require "enums.Colors"
+local ItemEffects = require "enums.ItemEffects"
 
-local GameMap = { width, height, level }
+local GameMap = { width, height, tiles, level }
 
 function GameMap:new(width, height, level)
     local obj = setmetatable({}, {__index = self})
@@ -207,7 +206,7 @@ function GameMap:placeEntities(room, entities)
 
             local item
             if itemChoice == "healingPotion" then
-                item = Entity:newItem(x, y, "!", Colors.VIOLET, "Healing Potion", { onUse=itemEffects.heal, args={ amount= 40} })
+                item = Entity:newItem(x, y, "!", Colors.VIOLET, "Healing Potion", { onUse=ItemEffects.HEAL, args={ amount= 40} })
             elseif itemChoice == "money" then
                 item = Entity:newGoldPile(x, y, rangeRoll(self.level, self.level * 30))
             elseif itemChoice == "sword" then
@@ -216,17 +215,17 @@ function GameMap:placeEntities(room, entities)
                 item = Entity:newEquipment(x, y, "[", Colors.DARKORANGE, "Shield", { slot=EquipmentSlots.OFF_HAND, defenseBonus=1 })
             elseif itemChoice == "fireballScroll" then
                 item = Entity:newItem(x, y, "#", Colors.RED, "Fireball Scroll", {
-                    onUse=itemEffects.castFireball, targeting=true,
+                    onUse=ItemEffects.CAST_FIREBALL, targeting=true,
                     targetingMessage=Message:new("Left-click a target tile for the fireball, or right-click to cancel.", "lightcyan"),
                     args={ damage=25, radius=3 }
                 })
             elseif itemChoice == "confusionScroll" then
                 item = Entity:newItem(x, y, "#", Colors.LIGHTPINK, "Confusion Scroll", {
-                    onUse=itemEffects.castConfuse, targeting=true,
+                    onUse=ItemEffects.CAST_CONFUSE, targeting=true,
                     targetingMessage=Message:new("Left-click an enemy to confuse it, or right-click to cancel.", "lightcyan")
                 })
             elseif itemChoice == "lightningScroll" then
-                item = Entity:newItem(x, y, "#", Colors.YELLOW, "Lightning Scroll", { onUse=itemEffects.castLightning, args={ damage=40, maxRange=5 } })
+                item = Entity:newItem(x, y, "#", Colors.YELLOW, "Lightning Scroll", { onUse=ItemEffects.CAST_LIGHTNING, args={ damage=40, maxRange=5 } })
             end
 
             table.insert(entities, item)
@@ -256,6 +255,21 @@ function GameMap:nextFloor(player, messageLog, constants)
     messageLog:addMessage(Message:new("You take a moment to rest and recover your strength.", "lightviolet"))
 
     return entities
+end
+
+function GameMap:toSaveData()
+    return {
+        width = self.width,
+        height = self.height,
+        tiles = self.tiles:toSaveData(),
+        level = self.level
+    }
+end
+
+function GameMap:fromSaveData(data)
+    local map = GameMap:new(data.width, data.height, data.level)
+    map.tiles = NodeMap:fromSaveData(data.tiles)
+    return map
 end
 
 return GameMap

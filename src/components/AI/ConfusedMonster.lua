@@ -30,4 +30,16 @@ function ConfusedMonster:takeTurn(_, _, gameMap, entities)
     return results
 end
 
+function ConfusedMonster:toSaveData()
+    return {
+        type = "confusedMonster",
+        previousAI = self.previousAI:toSaveData(),
+        numberOfTurns = self.numberOfTurns
+    }
+end
+
+function ConfusedMonster:fromSaveData(data)
+    return ConfusedMonster:new(data.previousAI, data.numberOfTurns)
+end
+
 return ConfusedMonster

@@ -65,7 +65,7 @@ function Inventory:use(itemEntity, args)
         local onUseArgs = {}
         for k, v in pairs(itemComponent.args) do onUseArgs[k] = v end
         for k, v in pairs(args) do onUseArgs[k] = v end
-        local itemResults = itemComponent.onUse(self.owner, onUseArgs)
+        local itemResults = itemComponent.onUse.effect(onUseArgs)
 
         for _, itemResult in ipairs(itemResults) do
             if itemResult.consumed then
@@ -136,8 +136,42 @@ function Inventory:getOptions()
     return resultOptions
 end
 
+function Inventory:getEquippedHands(mainHandName, offHandName)
+    local mainHand, offHand
+    for _, item in ipairs(self.items) do
+        if (not mainHandName or mainHand) and (not offHandName and offHand) then
+            break
+        end
+        if mainHandName and not mainHand and item.name == mainHandName then
+            mainHand = item
+        elseif offHandName and not offHand and item.name == offHandName then
+            offHand = item
+        end
+    end
+    return mainHand, offHand
+end
+
 function Inventory:getIndexFromOptions(index)
     return groupIndexes(self:getOptions())[index]
+end
+
+function Inventory:toSaveData()
+    local data = {
+        capacity = self.capacity,
+        items = {}
+    }
+    for _, item in ipairs(self.items) do
+        table.insert(data.items, item:toSaveData())
+    end
+    return data
+end
+
+function Inventory:fromSaveData(data)
+    local inventory = Inventory:new(data.capacity)
+    for _, value in ipairs(data.items) do
+        inventory:addItem(Item:fromSaveData(value))
+    end
+    return inventory
 end
 
 return Inventory
