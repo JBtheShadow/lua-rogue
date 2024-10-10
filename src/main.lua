@@ -56,6 +56,16 @@ end
 function love.update(dt)
 end
 
+function love.keypressed(key, scancode)
+    print(string.format("%s %s", key, scancode))
+end
+
+function love.mousepressed(x, y, button)
+    local gridX = math.floor(x / fontSize) + 1
+    local gridY = math.floor(y / fontSize) + 1
+    print(string.format("%d %d %s", gridX, gridY, button))
+end
+
 function love.draw()
     if showMainMenu then
         drawMainMenu()
@@ -70,6 +80,7 @@ end
 function drawMainMenu()
     drawBackgroundImage()
     drawTitle()
+    drawMenu("", {"Play a new game", "Continue last game", "Quit"}, 24)
 end
 
 function drawBackgroundImage()
@@ -88,6 +99,24 @@ function drawTitle()
     love.graphics.printf("by JBtheShadow", 0, screenHeight / 2 - 5.5 * fontSize, screenWidth, "center")
 end
 
+function drawMenu(header, options, width)
+    if #options > 26 then
+        error("Cannot have a menu with more than 26 options.")
+    end
+
+    local _, headerLines = font:getWrap(header, width * fontSize)
+    local height = (#options + #headerLines) * fontSize
+
+    local y = #headerLines * fontSize
+    local letterIndex = string.byte("a")
+    for _, optionText in ipairs(options) do
+        local text = string.format("(%s) %s", string.char(letterIndex), optionText)
+        love.graphics.printf(text, screenWidth / 2 - width * fontSize / 4, screenHeight / 2 + y, width * fontSize)
+        y = y + fontSize
+        letterIndex = letterIndex + 1
+    end
+end
+
 function setColor(color, alpha)
     love.graphics.setColor(color.color.r, color.color.g, color.color.b, alpha or 1)
 end
@@ -97,6 +126,7 @@ function setBackgroundColor(color, alpha)
 end
 
 function drawMessageBox(text, width)
+
 end
 
 function drawGame()

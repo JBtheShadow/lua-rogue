@@ -12,7 +12,7 @@ end
 function MessageLog:addMessage(message)
     print(message.text)
 
-    local _, newMsgLines = font.getWrap(message.text, self.width * fontSize)
+    local _, newMsgLines = font:getWrap(message.text, self.width * fontSize)
     for _, line in ipairs(newMsgLines) do
         if #self.messages >= self.height then
             table.remove(self.messages, 1)
