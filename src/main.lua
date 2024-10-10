@@ -57,7 +57,35 @@ function love.update(dt)
 end
 
 function love.keypressed(key, scancode)
-    print(string.format("%s %s", key, scancode))
+    if showMainMenu then
+        handleMainMenu(key)
+    else
+        print(string.format("%s %s", key, scancode))
+    end
+end
+
+function handleMainMenu(key)
+    if showLoadErrorMessage then
+        showLoadErrorMessage = false
+    elseif key == "a" then
+        newGame()
+    elseif key == "b" then
+        continue()
+    elseif key == "c" then
+        quit()
+    end
+end
+
+function newGame()
+
+end
+
+function continue()
+    showLoadErrorMessage = true
+end
+
+function quit()
+    love.event.quit()
 end
 
 function love.mousepressed(x, y, button)
@@ -70,7 +98,7 @@ function love.draw()
     if showMainMenu then
         drawMainMenu()
         if showLoadErrorMessage then
-            drawMessageBox("No save game to load", 50 * fontSize)
+            drawMessageBox("No save game to load!", 50)
         end
     else
         drawGame()
@@ -107,14 +135,27 @@ function drawMenu(header, options, width)
     local _, headerLines = font:getWrap(header, width * fontSize)
     local height = (#options + #headerLines) * fontSize
 
-    local y = #headerLines * fontSize
+    love.graphics.push()
+    love.graphics.translate(screenWidth / 2 - width * fontSize / 2, screenHeight / 2)
+
+    setColor(Colors.BLACK)
+    love.graphics.rectangle("fill", -fontSize, -fontSize, (width + 2) * fontSize, height + 2 * fontSize)
+    setColor(Colors.WHITE)
+
+    local y = 0
+    for _, headerText in ipairs(headerLines) do
+        love.graphics.printf(headerText, 0, y, width * fontSize)
+        y = y + fontSize
+    end
+
     local letterIndex = string.byte("a")
     for _, optionText in ipairs(options) do
         local text = string.format("(%s) %s", string.char(letterIndex), optionText)
-        love.graphics.printf(text, screenWidth / 2 - width * fontSize / 4, screenHeight / 2 + y, width * fontSize)
+        love.graphics.printf(text, 0, y, width * fontSize)
         y = y + fontSize
         letterIndex = letterIndex + 1
     end
+    love.graphics.pop()
 end
 
 function setColor(color, alpha)
@@ -126,7 +167,7 @@ function setBackgroundColor(color, alpha)
 end
 
 function drawMessageBox(text, width)
-
+    drawMenu(text, {}, width)
 end
 
 function drawGame()

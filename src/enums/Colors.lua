@@ -3,6 +3,7 @@ local function newColor(r, g, b)
 end
 
 local Colors = {
+    BLACK = { name = "black", color = newColor(0, 0, 0) },
     WHITE = { name = "white", color = newColor(1, 1, 1) },
     YELLOW = { name = "yellow", color = newColor(1, 1, 0) },
     GOLD = { name = "gold", color = newColor(1, 0.8, 0) },
