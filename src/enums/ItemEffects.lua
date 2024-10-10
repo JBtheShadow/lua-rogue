@@ -121,9 +121,9 @@ local ItemEffects = {
     CAST_CONFUSE = { name = "castConfuse", effect = castConfuse }
 }
 
-function ItemEffects:fromName(name)
-    for _, effect in ipairs(ItemEffects) do
-        if effect.name == name then
+function ItemEffects.fromName(name)
+    for _, effect in pairs(ItemEffects) do
+        if type(effect) == "table" and effect.name == name then
             return effect
         end
     end

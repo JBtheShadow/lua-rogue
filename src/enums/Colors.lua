@@ -17,9 +17,9 @@ local Colors = {
     DARKORANGE = { name = "darkorange", color = newColor(0.8, 0.5, 0) }
 }
 
-function Colors:fromName(name)
-    for _, color in Colors do
-        if color.name == name then
+function Colors.fromName(name)
+    for _, color in pairs(Colors) do
+        if type(color) == "table" and color.name == name then
             return color
         end
     end

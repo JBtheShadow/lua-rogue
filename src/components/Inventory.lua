@@ -1,5 +1,6 @@
 require "utils.optionUtils"
 local Message = require "messages.Message"
+local Item = require "components.Item"
 
 local Inventory = { capacity, items, owner }
 
@@ -14,10 +15,10 @@ end
 function Inventory:addItem(item)
     local results = {}
 
-    if item.item.canStack then
+    if item.args and item.args.canStack then
         local candidate = nil
         for _, x in ipairs(self.items) do
-            if x.name == item.name and x.item.canStack then
+            if x.name == item.name and x.args and x.args.canStack then
                 candidate = x
                 break
             end
@@ -123,7 +124,7 @@ function Inventory:getOptions()
             else
                 table.insert(equipOptions, string.format("%s (equipped elsewhere?)", item.name))
             end
-        elseif item.item.canStack then
+        elseif item.args and item.args.canStack then
             table.insert(options, string.format("%d %s(s)", item.item.amount, item.name))
         else
             table.insert(options, item.name)

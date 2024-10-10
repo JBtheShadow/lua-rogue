@@ -153,7 +153,7 @@ function GameMap:placeEntities(room, entities)
         orc = 80,
         troll = LevelTable:new({{3, 15}, {5, 30}, {7, 60}}):getChanceByLevel(self.level)
     }
-    print(table.concat(monsterChances, ", "))
+    --print(table.concat(monsterChances, ", "))
 
     local itemChances = ChoiceTable:new {
         money = 20,

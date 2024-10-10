@@ -17,7 +17,7 @@ function Message:toSaveData()
 end
 
 function Message:fromSaveData(data)
-    local color = Colors:fromName(data.color)
+    local color = Colors.fromName(data.color)
     return Message:new(data.text, color)
 end
 

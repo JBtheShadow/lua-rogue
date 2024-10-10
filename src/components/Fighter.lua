@@ -104,12 +104,12 @@ end
 
 function Fighter:toSaveData()
     return {
-        baseMaxHp = baseMaxHp,
-        baseDefense = baseDefense,
-        basePower = basePower,
-        baseSpeed = baseSpeed,
-        hp = hp,
-        xp = xp
+        baseMaxHp = self.baseMaxHp,
+        baseDefense = self.baseDefense,
+        basePower = self.basePower,
+        baseSpeed = self.baseSpeed,
+        hp = self.hp,
+        xp = self.xp
     }
 end
 

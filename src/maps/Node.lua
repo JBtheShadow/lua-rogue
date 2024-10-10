@@ -1,3 +1,5 @@
+require "utils.stringUtils"
+
 local Node = { id, x, y }
 
 function Node:new(x, y)
@@ -10,10 +12,10 @@ end
 
 function Node:fromId(id)
     local obj = setmetatable({}, {__index = self})
-    local parts = string.gmatch(id, ".")
+    local parts = split(id, ".")
     obj.id = id
-    obj.x = tonumber(parts[0])
-    obj.y = tonumber(parts[1])
+    obj.x = tonumber(parts[1])
+    obj.y = tonumber(parts[2])
     return obj
 end
 

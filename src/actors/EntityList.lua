@@ -1,3 +1,4 @@
+local Entity = require "actors.Entity"
 local EntityList = { entities, queue }
 
 function EntityList:new()

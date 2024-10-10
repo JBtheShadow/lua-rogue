@@ -252,7 +252,7 @@ function Entity:fromSaveData(data)
         x = data.x,
         y = data.y,
         char = data.char,
-        color = Colors:fromName(data.color),
+        color = Colors.fromName(data.color),
         name = data.name,
         blocks = data.blocks,
         renderOrder = data.renderOrder,

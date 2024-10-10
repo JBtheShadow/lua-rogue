@@ -2,13 +2,13 @@ function capitalize(str)
     return (str:gsub("^%l", string.upper))
 end
 
-function split(str, sep)
+function split(inputstr, sep)
     if sep == nil then
         sep = "%s"
-      end
-      local t = {}
-      for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+    end
+    local t = {}
+    for str in inputstr:gmatch("([^"..sep.."]+)") do
         table.insert(t, str)
-      end
-      return t
+    end
+    return t
 end

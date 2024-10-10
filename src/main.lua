@@ -1,6 +1,7 @@
 require "utils.saveUtils"
 
 local Colors = require "enums.Colors"
+local GameStates = require "enums.GameStates"
 
 local constants, variables
 local font, fontSize
@@ -16,6 +17,10 @@ function love.load()
     loadVariables()
     loadBackgroundImage()
     testSave()
+end
+
+function testSave()
+    saveGame(player, entities, gameMap, messageLog, gameState)
 end
 
 function loadConstants()
@@ -49,10 +54,6 @@ function loadBackgroundImage()
     mainMenuBackgroundImage = love.graphics.newImage("img/menu_background.png")
 end
 
-function testSave()
-    saveGame(player, entities, gameMap, messageLog, gameState)
-end
-
 function love.update(dt)
 end
 
@@ -77,11 +78,23 @@ function handleMainMenu(key)
 end
 
 function newGame()
-
+    loadVariables()
+    gameState = GameStates.PLAYERS_TURN
+    showMainMenu = false
 end
 
 function continue()
-    showLoadErrorMessage = true
+    local success, loadedPlayer, loadedEntities, loadedGameMap, loadedMessageLog, loadedGameState = loadGame()
+    if not success then
+        showLoadErrorMessage = true
+    else
+        player = loadedPlayer
+        entities = loadedEntities
+        gameMap = loadedGameMap
+        messageLog = loadedMessageLog
+        gameState = loadedGameState
+        showMainMenu = false
+    end
 end
 
 function quit()

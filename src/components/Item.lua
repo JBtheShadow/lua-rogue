@@ -23,7 +23,7 @@ end
 
 function Item:fromSaveData(data)
     return Item:new {
-        onUse = ItemEffects:fromName(data.onUse),
+        onUse = ItemEffects.fromName(data.onUse),
         args = data.args,
         targeting = data.targeting,
         targetingMessage = data.targetingMessage

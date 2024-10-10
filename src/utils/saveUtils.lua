@@ -19,7 +19,7 @@ end
 
 function loadGame()
     if not love.filesystem.getInfo("savegame.txt") then
-        return nil
+        return false
     end
 
     local file = love.filesystem.read("savegame.txt")
@@ -32,5 +32,5 @@ function loadGame()
     local gameState = data.gameState
     local player = entities:atIndex(playerIndex)
 
-    return player, entities, gameMap, messageLog, gameState
+    return true, player, entities, gameMap, messageLog, gameState
 end
